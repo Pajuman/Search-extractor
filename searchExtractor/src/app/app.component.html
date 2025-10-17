@@ -1,5 +1,10 @@
-<p-listbox [options]="items" [(ngModel)]="selectedItems" [checkbox]="true" [filter]="true" [selectAll]="selectAll"
-           optionLabel="label" [virtualScroll]="true" [virtualScrollItemSize]="40" [multiple]="true"
+<p-listbox [options]="items" [(ngModel)]="selectedItems" [checkbox]="true" [selectAll]="selectAll"
+           optionLabel="label" [multiple]="true"
            [metaKeySelection]="false" (onSelectAllChange)="onSelectAllChange($event)" (onChange)="onChange($event)"
-           scrollHeight="250px" [striped]="true" class="w-full md:w-56"/>
- 
+           scrollHeight="250px" class="md:w-56"/>
+<div>
+  <label for="query">Enter search query:</label>
+  <input #input id="query" type="text" placeholder="Type something..."/>
+  <p-button (onClick)="search(input.value)">Search</p-button>
+</div>
+
