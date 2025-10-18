@@ -6,39 +6,56 @@
   <label for="query">Enter search query:</label>
   <input #input id="query" type="text" placeholder="Type something..."/>
   <p-button (onClick)="search(input.value)">Search</p-button>
+  <p-button (onClick)="save()">Save</p-button>
 </div>
-@if(apiRecords().Wikipedia.length > 0){
+@if (apiRecords().Wikipedia.length > 0) {
   <h3>Wikipedia</h3>
-
-  <p-table [value]="apiRecords().Wikipedia" [tableStyle]="{ 'min-width': '50rem' }">
-  <ng-template #header>
-    <tr>
-      <th>Title</th>
-      <th>Url</th>
-      <th>Last actualization</th>
-    </tr>
-  </ng-template>
-  <ng-template #body let-record>
-    <tr>
-      <td>{{ record.title }}</td>
-      <td>{{ record.snippet }}</td>
-      <td>{{ record.score | ageInMonths }}</td>
-    </tr>
-  </ng-template>
-</p-table>
-}
-@if(apiRecords().HackerNews.length > 0){
-  <h3>Hacker news</h3>
-  <p-table [value]="apiRecords().HackerNews" [tableStyle]="{ 'min-width': '50rem' }">
+  <p-table [value]="apiRecords().Wikipedia"
+           [tableStyle]="{ 'min-width': '50rem' }"
+           [(selection)]="selectedWikipediaRecords"
+           selectionMode="multiple">
     <ng-template #header>
       <tr>
+        <th style="width: 3rem">
+          <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+        </th>
+        <th>Title</th>
+        <th>Url</th>
+        <th>Last actualization</th>
+      </tr>
+    </ng-template>
+    <ng-template #body let-record>
+      <tr [pSelectableRow]="record">
+        <td>
+          <p-tableCheckbox [value]="record"></p-tableCheckbox>
+        </td>
+        <td>{{ record.title }}</td>
+        <td>{{ record.snippet }}</td>
+        <td>{{ record.score | ageInMonths }}</td>
+      </tr>
+    </ng-template>
+  </p-table>
+}
+@if (apiRecords().HackerNews.length > 0) {
+  <h3>Hacker news</h3>
+  <p-table [value]="apiRecords().HackerNews" [tableStyle]="{ 'min-width': '50rem' }"
+           [(selection)]="selectedHackerNewsRecords"
+           selectionMode="multiple">">
+    <ng-template #header>
+      <tr>
+        <th style="width: 3rem">
+          <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+        </th>
         <th>Title</th>
         <th>Author</th>
         <th>Points</th>
       </tr>
     </ng-template>
     <ng-template #body let-record>
-      <tr>
+      <tr [pSelectableRow]="record">
+        <td>
+          <p-tableCheckbox [value]="record"></p-tableCheckbox>
+        </td>
         <td>{{ record.title }}</td>
         <td>{{ record.snippet }}</td>
         <td>{{ record.score }}</td>
@@ -46,18 +63,26 @@
     </ng-template>
   </p-table>
 }
-@if(apiRecords().OpenLibrary.length > 0){
+@if (apiRecords().OpenLibrary.length > 0) {
   <h3>OpenLibrary</h3>
-  <p-table [value]="apiRecords().OpenLibrary" [tableStyle]="{ 'min-width': '50rem' }">
+  <p-table [value]="apiRecords().OpenLibrary" [tableStyle]="{ 'min-width': '50rem' }"
+           [(selection)]="selectedOpenLibraryRecords"
+           selectionMode="multiple">">
     <ng-template #header>
       <tr>
+        <th style="width: 3rem">
+          <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+        </th>
         <th>Title</th>
         <th>Authors</th>
         <th>Languages</th>
       </tr>
     </ng-template>
     <ng-template #body let-record>
-      <tr>
+      <tr [pSelectableRow]="record">
+        <td>
+          <p-tableCheckbox [value]="record"></p-tableCheckbox>
+        </td>
         <td>{{ record.title }}</td>
         <td>{{ record.snippet }}</td>
         <td>{{ record.score }}</td>
