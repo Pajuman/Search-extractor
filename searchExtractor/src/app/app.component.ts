@@ -10,10 +10,11 @@ import {
 } from '../interfaces/interfaces';
 import { Button } from 'primeng/button';
 import { ApiCallService } from '../services/apiCall.service';
+import {TableModule} from 'primeng/table';
 
 @Component({
   selector: 'app-root',
-  imports: [Listbox, FormsModule, Button],
+  imports: [Listbox, FormsModule, Button, TableModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })

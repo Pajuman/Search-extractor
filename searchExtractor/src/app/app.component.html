@@ -7,4 +7,25 @@
   <input #input id="query" type="text" placeholder="Type something..."/>
   <p-button (onClick)="search(input.value)">Search</p-button>
 </div>
+@for(api of APIS; track api.sourceId){
+@if(selectedItems.includes(api)){
+<p-table >
+  <ng-template #header>
+    <tr>
+      <th>Code</th>
+      <th>Name</th>
+      <th>Category</th>
+      <th>Quantity</th>
+    </tr>
+  </ng-template>
+  <ng-template #body let-product>
+    <tr>
+      <td>{{ product.code }}</td>
+      <td>{{ product.name }}</td>
+      <td>{{ product.category }}</td>
+      <td>{{ product.quantity }}</td>
+    </tr>
+  </ng-template>
+</p-table>
+}}
 
