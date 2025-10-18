@@ -1,28 +1,44 @@
-import { inject, Injectable } from '@angular/core';
+import {inject, Injectable, signal, WritableSignal} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { ApiRecord, SourceId } from '../interfaces/interfaces';
+import {ApiRecord, BOOKS_FIELDS_STRING, MyApi, SourceId} from '../interfaces/interfaces';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ApiCallService {
+  public apiRecords: WritableSignal<Record<SourceId, ApiRecord[]>>  = signal({
+    [SourceId.Wikipedia]: [],
+    [SourceId.HackerNews]: [],
+    [SourceId.OpenLibrary]: [],
+    [SourceId.GitHub]: [],
+  });
   private http = inject(HttpClient);
 
-  public callApi(url: string): Observable<any> {
-    return this.http.get(url);
+  public callApi(searchString: string, myApi: MyApi) {
+    const url = this.getUrl(myApi, searchString);
+    this.http.get<string>(url).subscribe({
+      next: (res) => {
+        this.processApiData(
+          myApi.sourceId,
+          res,
+        );
+      },
+      error: (err) => console.error(err),
+    });
   }
 
-  public processApiData(sourceId: SourceId, response: string): ApiRecord[] {
+  public processApiData(sourceId: SourceId, response: string) {
     switch (sourceId) {
       case SourceId.OpenLibrary:
-        return this.processLibraryData(response);
+        this.processLibraryData(response);
+        break;
       case SourceId.HackerNews:
-        return this.processHackerNewsData(response);
+        this.processHackerNewsData(response);
+        break;
       case SourceId.Wikipedia:
-        return this.processWikipediaData(response);
-      default:
-        return [];
+        this.processWikipediaData(response);
+        break;
     }
   }
 
@@ -42,7 +58,7 @@ export class ApiCallService {
       };
       apiRecords.push(apiRecord);
     }
-    return apiRecords;
+    this.apiRecords().Wikipedia = apiRecords;
   }
 
   private processHackerNewsData(response: any) {
@@ -62,7 +78,7 @@ export class ApiCallService {
         apiRecords.push(apiRecord);
       }
     });
-    return apiRecords;
+    this.apiRecords().HackerNews = apiRecords;
   }
 
   private processLibraryData(response: any) {
@@ -83,7 +99,7 @@ export class ApiCallService {
       }
     });
 
-    return apiRecords;
+    this.apiRecords().OpenLibrary = apiRecords;
   }
 
   private getAgeInMonths(timestamp: string) {
@@ -102,5 +118,15 @@ export class ApiCallService {
     }
 
     return totalMonths;
+  }
+
+  private getUrl(myApi: MyApi, searchString: string) {
+    let url = myApi.url + searchString;
+    switch (myApi.sourceId) {
+      case SourceId.OpenLibrary:
+        return url + BOOKS_FIELDS_STRING;
+      default:
+        return url;
+    }
   }
 }

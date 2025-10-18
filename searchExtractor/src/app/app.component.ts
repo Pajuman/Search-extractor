@@ -11,10 +11,11 @@ import {
 import { Button } from 'primeng/button';
 import { ApiCallService } from '../services/apiCall.service';
 import {TableModule} from 'primeng/table';
+import {AgeInMonthsPipe} from '../pipes/pipes/age-in-months.pipe';
 
 @Component({
   selector: 'app-root',
-  imports: [Listbox, FormsModule, Button, TableModule],
+  imports: [Listbox, FormsModule, Button, TableModule, AgeInMonthsPipe],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
@@ -22,8 +23,8 @@ export class AppComponent {
   public items = APIS;
   public selectedItems: MyApi[] = [];
   public selectAll = false;
-  public apiRecords: WritableSignal<ApiRecord[]> = signal([]);
   private apiCallService = inject(ApiCallService);
+  public apiRecords: WritableSignal<Record<SourceId, ApiRecord[]>>  = this.apiCallService.apiRecords;
 
   public onSelectAllChange(event: any) {
     this.selectedItems = event.checked ? [...this.items] : [];
@@ -39,33 +40,8 @@ export class AppComponent {
 
   public search(searchString: string) {
     this.selectedItems.forEach((myApi) => {
-      const url = this.getUrl(myApi, searchString);
-      this.apiCallService.callApi(url).subscribe({
-        next: (res) => {
-          const newRecords = this.apiCallService.processApiData(
-            myApi.sourceId,
-            res,
-          );
-          this.concatRecords(newRecords);
-          console.log(this.apiRecords());
-        },
-        error: (err) => console.error(err),
-      });
+
+      this.apiCallService.callApi(searchString, myApi);
     });
-  }
-
-  private concatRecords(newApiRecords: ApiRecord[]) {
-    const concatenatedRecords = [...this.apiRecords(), ...newApiRecords];
-    this.apiRecords.set(concatenatedRecords);
-  }
-
-  private getUrl(myApi: MyApi, searchString: string) {
-    let url = myApi.url + searchString;
-    switch (myApi.sourceId) {
-      case SourceId.OpenLibrary:
-        return url + BOOKS_FIELDS_STRING;
-      default:
-        return url;
-    }
   }
 }
