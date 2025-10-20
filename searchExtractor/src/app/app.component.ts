@@ -1,4 +1,9 @@
-import { Component, inject, WritableSignal } from '@angular/core';
+import {
+  Component,
+  inject,
+  ViewEncapsulation,
+  WritableSignal,
+} from '@angular/core';
 import { Listbox } from 'primeng/listbox';
 import { FormsModule } from '@angular/forms';
 import { ApiRecord, APIS, MyApi, SourceId } from '../interfaces/interfaces';
@@ -12,6 +17,7 @@ import { AgeInMonthsPipe } from '../pipes/pipes/age-in-months.pipe';
   imports: [Listbox, FormsModule, Button, TableModule, AgeInMonthsPipe],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
+  encapsulation: ViewEncapsulation.None,
 })
 export class AppComponent {
   public items = APIS;
@@ -43,8 +49,8 @@ export class AppComponent {
   }
 
   public save() {
-    const data = JSON.stringify(this.selectedOpenLibraryRecords, null, 2); // pretty-print with 2 spaces
-    const blob = new Blob([data], { type: 'application/json' });
+    const libraryData = JSON.stringify(this.selectedOpenLibraryRecords, null, 2); // pretty-print with 2 spaces
+    const blob = new Blob([libraryData], { type: 'application/json' });
     const url = window.URL.createObjectURL(blob);
 
     const a = document.createElement('a');

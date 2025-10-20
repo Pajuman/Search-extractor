@@ -1,0 +1,66 @@
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: sticky;
+  top: 0;
+  width: 100%;
+  z-index: 1;
+  background-color: antiquewhite;
+}
+
+.search {
+  display: flex;
+  flex-direction: row;
+}
+
+.search-list {
+  display: block;
+  width: 20rem;
+  padding: 1rem;
+}
+
+.search-input {
+  display: flex;
+  flex-direction: column;
+  width: 20rem;
+  align-items: flex-start;
+  padding: 1rem;
+}
+
+.tables {
+}
+
+
+.search-result {
+  width: 90% !important;
+  margin: 1rem auto;
+  padding: 1rem;
+  border: 2px solid black;
+  border-radius: 1rem;
+
+  .wiki-table {
+    background-color: #e4fad7;
+  }
+
+  .library-table {
+    background-color: #d7dffa;
+  }
+
+  .github-table {
+    background-color: #f7d7fa;
+  }
+
+  .hacker-table {
+    background-color: #faf8d7;
+  }
+}
+
+.p-datatable-thead > tr > th, .p-datatable-tbody > tr {
+  background-color: beige;
+}
+
+.p-datatable-tbody > tr:last-child td {
+  border: none;
+}
