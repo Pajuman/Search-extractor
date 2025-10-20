@@ -7,22 +7,22 @@ export enum SourceId {
 
 export const APIS: MyApi[] = [
   {
-    url: 'https://en.wikipedia.org/api/rest_v1/page/title/',
+    url: '/api/search?source=Wikipedia&search=',
     label: 'Wikipedia Search',
     sourceId: SourceId.Wikipedia,
   },
   {
-    url: 'https://hn.algolia.com/api/v1/search?query=',
+    url: '/api/search?source=HackerNews&search=',
     label: 'Hacker News Algolia',
     sourceId: SourceId.HackerNews,
   },
   {
-    url: 'https://openlibrary.org/search.json?q=',
+    url: '/api/search?source=OpenLibrary&search=',
     label: 'Open Library Search',
     sourceId: SourceId.OpenLibrary,
   },
   {
-    url: 'https://api.github.com/search/repositories?q=',
+    url: '/api/search?source=GitHub&search=',
     label: 'GitHub Search API',
     sourceId: SourceId.GitHub,
   },

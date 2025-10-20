@@ -1,7 +1,6 @@
-type CacheItem = { data: any; expiry: number };
-const cache = new Map<string, CacheItem>();
+const cache = new Map();
 
-export function getCache(key: string): any | null {
+export function getCache(key) {
   const item = cache.get(key);
   if (!item) return null;
   if (Date.now() > item.expiry) {
@@ -11,6 +10,6 @@ export function getCache(key: string): any | null {
   return item.data;
 }
 
-export function setCache(key: string, data: any, ttl: number) {
+export function setCache(key, data, ttl) {
   cache.set(key, { data, expiry: Date.now() + ttl });
 }

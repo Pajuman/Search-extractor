@@ -23,7 +23,6 @@ export class ApiCallService {
     const url = this.getUrl(myApi, searchString);
     this.http.get<string>(url).subscribe({
       next: (res) => {
-        console.log(res);
         this.processApiData(myApi.sourceId, res);
       },
       error: (err) => console.error(err),
@@ -108,7 +107,6 @@ export class ApiCallService {
   }
 
   private processGitHubData(response: any) {
-    console.log(1);
     const apiRecords: ApiRecord[] = [];
     const items: any[] = response.items;
     items.forEach((item) => {
@@ -127,7 +125,6 @@ export class ApiCallService {
     });
 
     this.apiRecords().GitHub = apiRecords;
-    console.log(this.apiRecords().GitHub);
   }
 
   private getAgeInMonths(timestamp: string) {
