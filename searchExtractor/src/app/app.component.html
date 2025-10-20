@@ -13,7 +13,8 @@
       <label for="query">Enter search query:</label>
       <input #input id="query" type="text" placeholder="Type something..."/>
       <p-button (onClick)="search(input.value)">Search</p-button>
-      <p-button (onClick)="save()">Save</p-button>
+      <p-button (onClick)="save()">Export selected</p-button>
+      <p-button (onClick)="save(true)">Export all</p-button>
     </div>
   </div>
 </div>

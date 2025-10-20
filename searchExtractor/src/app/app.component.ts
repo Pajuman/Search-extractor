@@ -29,6 +29,7 @@ export class AppComponent {
   public selectedWikipediaRecords: ApiRecord[] = [];
   public selectedOpenLibraryRecords: ApiRecord[] = [];
   public selectedHackerNewsRecords: ApiRecord[] = [];
+  public selectedGitHubRecords: ApiRecord[] = [];
 
   public onSelectAllChange(event: any) {
     this.selectedItems = event.checked ? [...this.items] : [];
@@ -48,9 +49,9 @@ export class AppComponent {
     });
   }
 
-  public save() {
-    const libraryData = JSON.stringify(this.selectedOpenLibraryRecords, null, 2); // pretty-print with 2 spaces
-    const blob = new Blob([libraryData], { type: 'application/json' });
+  public save(saveAll = false) {
+    const stringifiedObject = this.getStringifiedObjectToSave(saveAll);
+    const blob = new Blob([stringifiedObject], { type: 'application/json' });
     const url = window.URL.createObjectURL(blob);
 
     const a = document.createElement('a');
@@ -59,5 +60,46 @@ export class AppComponent {
     a.click();
 
     window.URL.revokeObjectURL(url);
+  }
+
+  private getStringifiedObjectToSave(saveAll: boolean) {
+    const object: { [key: string]: ApiRecord[] } = {};
+    if (
+      this.selectedOpenLibraryRecords.length ||
+      (saveAll && this.apiRecords().OpenLibrary.length)
+    ) {
+      object['openLibrary'] = saveAll
+        ? this.apiRecords().OpenLibrary
+        : this.selectedOpenLibraryRecords;
+    }
+
+    if (
+      this.selectedWikipediaRecords.length ||
+      (saveAll && this.apiRecords().Wikipedia.length)
+    ) {
+      object['wikipedia'] = saveAll
+        ? this.apiRecords().Wikipedia
+        : this.selectedWikipediaRecords;
+    }
+
+    if (
+      this.selectedHackerNewsRecords.length ||
+      (saveAll && this.apiRecords().HackerNews.length)
+    ) {
+      object['hackerNews'] = saveAll
+        ? this.apiRecords().HackerNews
+        : this.selectedHackerNewsRecords;
+    }
+
+    if (
+      this.selectedGitHubRecords.length ||
+      (saveAll && this.apiRecords().GitHub.length)
+    ) {
+      object['gitHub'] = saveAll
+        ? this.apiRecords().GitHub
+        : this.selectedGitHubRecords;
+    }
+
+    return JSON.stringify(object, null, 2);
   }
 }
