@@ -106,7 +106,35 @@
         </ng-template>
       </p-table>
     </div>
-
+  }
+  @if (apiRecords().GitHub.length > 0) {
+    <div class="search-result library-table">
+      <h3>GitHub</h3>
+      <p-table [value]="apiRecords().GitHub" [tableStyle]="{ 'min-width': '50rem' }"
+               [(selection)]="selectedGitHubRecords"
+               selectionMode="multiple">">
+        <ng-template #header>
+          <tr>
+            <th style="width: 3rem">
+              <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+            </th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Stars</th>
+          </tr>
+        </ng-template>
+        <ng-template #body let-record>
+          <tr [pSelectableRow]="record">
+            <td>
+              <p-tableCheckbox [value]="record"></p-tableCheckbox>
+            </td>
+            <td>{{ record.title }}</td>
+            <td>{{ record.snippet }}</td>
+            <td>{{ record.score }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
   }
 </div>
 

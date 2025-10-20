@@ -1,13 +1,17 @@
-import {inject, Injectable, signal, WritableSignal} from '@angular/core';
+import { inject, Injectable, signal, WritableSignal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import {ApiRecord, BOOKS_FIELDS_STRING, MyApi, SourceId} from '../interfaces/interfaces';
+import {
+  ApiRecord,
+  BOOKS_FIELDS_STRING,
+  MyApi,
+  SourceId,
+} from '../interfaces/interfaces';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ApiCallService {
-  public apiRecords: WritableSignal<Record<SourceId, ApiRecord[]>>  = signal({
+  public apiRecords: WritableSignal<Record<SourceId, ApiRecord[]>> = signal({
     [SourceId.Wikipedia]: [],
     [SourceId.HackerNews]: [],
     [SourceId.OpenLibrary]: [],
@@ -19,10 +23,8 @@ export class ApiCallService {
     const url = this.getUrl(myApi, searchString);
     this.http.get<string>(url).subscribe({
       next: (res) => {
-        this.processApiData(
-          myApi.sourceId,
-          res,
-        );
+        console.log(res);
+        this.processApiData(myApi.sourceId, res);
       },
       error: (err) => console.error(err),
     });
@@ -38,6 +40,9 @@ export class ApiCallService {
         break;
       case SourceId.Wikipedia:
         this.processWikipediaData(response);
+        break;
+      case SourceId.GitHub:
+        this.processGitHubData(response);
         break;
     }
   }
@@ -100,6 +105,29 @@ export class ApiCallService {
     });
 
     this.apiRecords().OpenLibrary = apiRecords;
+  }
+
+  private processGitHubData(response: any) {
+    console.log(1);
+    const apiRecords: ApiRecord[] = [];
+    const items: any[] = response.items;
+    items.forEach((item) => {
+      if (item.name && item.description && item.stargazers_count) {
+        const title = item.name;
+        const snippet: string = item.description;
+        const score = item.stargazers_count;
+        const apiRecord: ApiRecord = {
+          sourceId: SourceId.GitHub,
+          title: title,
+          snippet: snippet,
+          score: score,
+        };
+        apiRecords.push(apiRecord);
+      }
+    });
+
+    this.apiRecords().GitHub = apiRecords;
+    console.log(this.apiRecords().GitHub);
   }
 
   private getAgeInMonths(timestamp: string) {

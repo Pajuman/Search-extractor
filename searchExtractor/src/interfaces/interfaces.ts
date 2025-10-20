@@ -22,7 +22,7 @@ export const APIS: MyApi[] = [
     sourceId: SourceId.OpenLibrary,
   },
   {
-    url: 'aaa',
+    url: 'https://api.github.com/search/repositories?q=',
     label: 'GitHub Search API',
     sourceId: SourceId.GitHub,
   },
