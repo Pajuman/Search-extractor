@@ -1,11 +1,6 @@
 import { inject, Injectable, signal, WritableSignal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import {
-  ApiRecord,
-  BOOKS_FIELDS_STRING,
-  MyApi,
-  SourceId,
-} from '../interfaces/interfaces';
+import { ApiRecord, MyApi, SourceId } from '../interfaces/interfaces';
 
 @Injectable({
   providedIn: 'root',
@@ -20,7 +15,7 @@ export class ApiCallService {
   private http = inject(HttpClient);
 
   public callApi(searchString: string, myApi: MyApi) {
-    const url = this.getUrl(myApi, searchString);
+    const url = myApi.url + searchString;
     this.http.get<string>(url).subscribe({
       next: (res) => {
         this.processApiData(myApi.sourceId, res);
@@ -29,7 +24,7 @@ export class ApiCallService {
     });
   }
 
-  public processApiData(sourceId: SourceId, response: string) {
+  private processApiData(sourceId: SourceId, response: string) {
     switch (sourceId) {
       case SourceId.OpenLibrary:
         this.processLibraryData(response);
@@ -63,6 +58,7 @@ export class ApiCallService {
       apiRecords.push(apiRecord);
     }
     this.apiRecords().Wikipedia = apiRecords;
+    console.log(this.apiRecords());
   }
 
   private processHackerNewsData(response: any) {
@@ -143,15 +139,5 @@ export class ApiCallService {
     }
 
     return totalMonths;
-  }
-
-  private getUrl(myApi: MyApi, searchString: string) {
-    let url = myApi.url + searchString;
-    switch (myApi.sourceId) {
-      case SourceId.OpenLibrary:
-        return url + BOOKS_FIELDS_STRING;
-      default:
-        return url;
-    }
   }
 }
