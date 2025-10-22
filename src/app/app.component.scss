@@ -27,40 +27,63 @@
   width: 20rem;
   align-items: flex-start;
   padding: 1rem;
+
+  input {
+    height: 2rem;
+    margin-right: 1rem;
+    border: 1px solid #6b6b6b !important;
+    border-radius: 0.25rem;
+  }
 }
 
-.tables {
+.p-listbox {
+  border: 2px solid #6b6b6b !important;
 }
 
+$tables: (
+  wiki: #9bd4ea,
+  library: #cde3a2,
+  github: #d2aad6,
+  hacker: #d3c9a8
+);
 
 .search-result {
   width: 90% !important;
   margin: 1rem auto;
   padding: 1rem;
-  border: 2px solid black;
+  border: 2px solid #6b6b6b;
   border-radius: 1rem;
 
-  .wiki-table {
-    background-color: #e4fad7;
+  .p-datatable-tbody > tr:last-child td {
+    border: none;
   }
 
-  .library-table {
-    background-color: #d7dffa;
+  .p-datatable-thead > tr > th,
+  .p-datatable-tbody > tr > td {
+    white-space: wrap;
+
+
+    &:nth-child(2) {
+      width: 250px;
+    }
+
+    &:nth-child(4) {
+      width: 200px;
+      text-align: center;
+    }
+
+    border-color: #6b6b6b !important;
+    color: black !important;
   }
 
-  .github-table {
-    background-color: #f7d7fa;
+  @each $name, $color in $tables {
+    &.#{$name}-table {
+      background-color: $color;
+
+      .p-datatable-thead > tr > th,
+      .p-datatable-tbody > tr {
+        background-color: $color;
+      }
+    }
   }
-
-  .hacker-table {
-    background-color: #faf8d7;
-  }
-}
-
-.p-datatable-thead > tr > th, .p-datatable-tbody > tr {
-  background-color: beige;
-}
-
-.p-datatable-tbody > tr:last-child td {
-  border: none;
 }

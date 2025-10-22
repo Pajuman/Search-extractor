@@ -8,11 +8,11 @@
                  (onChange)="onChange($event)"
                  scrollHeight="250px"/>
     </div>
-
     <div class="search-input">
-      <label for="query">Enter search query:</label>
-      <input #input id="query" type="text" placeholder="Type something..."/>
-      <p-button (onClick)="search(input.value)">Search</p-button>
+      <div><label for="query">Enter search query:</label>
+        <input #input id="query" type="text" placeholder="Type something..."/>
+        <p-button (onClick)="search(input.value)">Search</p-button>
+      </div>
       <p-button (onClick)="save()">Export selected</p-button>
       <p-button (onClick)="save(true)">Export all</p-button>
     </div>
@@ -60,8 +60,8 @@
             <th style="width: 3rem">
               <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
             </th>
-            <th>Title</th>
             <th>Author</th>
+            <th>Title</th>
             <th>Points</th>
           </tr>
         </ng-template>
@@ -70,8 +70,8 @@
             <td>
               <p-tableCheckbox [value]="record"></p-tableCheckbox>
             </td>
-            <td>{{ record.title }}</td>
             <td>{{ record.snippet }}</td>
+            <td>{{ record.title }}</td>
             <td>{{ record.score }}</td>
           </tr>
         </ng-template>
@@ -108,7 +108,7 @@
     </div>
   }
   @if (apiRecords().GitHub.length > 0) {
-    <div class="search-result library-table">
+    <div class="search-result github-table">
       <h3>GitHub</h3>
       <p-table [value]="apiRecords().GitHub" [tableStyle]="{ 'min-width': '50rem' }"
                [(selection)]="selectedGitHubRecords"
@@ -118,7 +118,7 @@
             <th style="width: 3rem">
               <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
             </th>
-            <th>Name</th>
+            <th>Title</th>
             <th>Description</th>
             <th>Stars</th>
           </tr>
