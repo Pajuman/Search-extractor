@@ -134,10 +134,8 @@ export class ApiCallService {
     const yearsDiff = now.getFullYear() - date.getFullYear();
     const monthsDiff = now.getMonth() - date.getMonth();
 
-    // Total months difference
     let totalMonths = yearsDiff * 12 + monthsDiff;
 
-    // If the current day is before the timestamp day, subtract 1 month
     if (now.getDate() < date.getDate()) {
       totalMonths -= 1;
     }
