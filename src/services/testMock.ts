@@ -265,7 +265,7 @@ export const MOCK_RESPONSES = [
   },
 ];
 
-export const PRECESSED_RESPONSES: ApiRecord[][] = [
+export const PROCESSED_RESPONSES: ApiRecord[][] = [
   [
     {
       sourceId: SourceId.Wikipedia,
@@ -317,3 +317,6 @@ export const PRECESSED_RESPONSES: ApiRecord[][] = [
     },
   ],
 ];
+
+export const STRNGIFIED_HACKER_JSON =
+  '{\n  "HackerNews": [\n    {\n      "sourceId": "HackerNews",\n      "score": 1187,\n      "snippet": "Thorondor",\n      "title": "Planet Found in Habitable Zone Around Nearest Star"\n    }\n  ]\n}';

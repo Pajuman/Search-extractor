@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { of } from 'rxjs';
 import { ApiCallService } from './apiCall.service';
 import { APIS, SourceId } from '../interfaces/interfaces';
-import { MOCK_RESPONSES, PRECESSED_RESPONSES } from './testMock';
+import { MOCK_RESPONSES, PROCESSED_RESPONSES } from './testMock';
 
 describe('ApiCallService', () => {
   let service: ApiCallService;
@@ -32,7 +32,7 @@ describe('ApiCallService', () => {
       const expectedUrl = APIS[i].url + 'hobit';
       expect(httpClientSpy.get).toHaveBeenCalledWith(expectedUrl);
       expect(service.apiRecords()[sourceIds[i]]).toEqual(
-        PRECESSED_RESPONSES[i],
+        PROCESSED_RESPONSES[i],
       );
     }
   }));
