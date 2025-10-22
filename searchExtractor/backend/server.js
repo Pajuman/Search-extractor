@@ -6,7 +6,6 @@ const app = express();
 app.use(cors());
 
 const PORT = 3000;
-const CACHE_TTL = 5 * 60 * 1000;
 
 app.get("/api/search", async (req, res) => {
   const search = req.query.search;
@@ -38,10 +37,12 @@ app.get("/api/search", async (req, res) => {
     default:
       return res.status(400).json({ error: "Unknown source" });
   }
+
   const cacheKey = source.toLowerCase() + "_" + encodeURIComponent(search);
   const cached = getCache(cacheKey);
   if (cached) {
     console.log("✅ cache hit");
+    res.setHeader("X-Cache", "HIT");
     return res.json(cached);
   }
 
@@ -50,7 +51,7 @@ app.get("/api/search", async (req, res) => {
     const response = await fetch(apiUrl);
     const data = await response.json();
 
-    setCache(cacheKey, data, CACHE_TTL);
+    setCache(cacheKey, data);
     res.json(data);
   } catch (err) {
     console.error(err);

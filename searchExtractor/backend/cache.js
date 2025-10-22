@@ -1,4 +1,5 @@
 const cache = new Map();
+const CACHE_TTL = 5 * 60 * 1000;
 
 export function getCache(key) {
   const item = cache.get(key);
@@ -10,6 +11,6 @@ export function getCache(key) {
   return item.data;
 }
 
-export function setCache(key, data, ttl) {
-  cache.set(key, { data, expiry: Date.now() + ttl });
+export function setCache(key, data) {
+  cache.set(key, { data, expiry: Date.now() + CACHE_TTL });
 }
