@@ -23,7 +23,9 @@ export class AppComponent {
   public items = APIS;
   public selectedItems: MyApi[] = [];
   public selectAll = false;
+  public searchString = '';
   private apiCallService = inject(ApiCallService);
+
   public apiRecords: WritableSignal<Record<SourceId, ApiRecord[]>> =
     this.apiCallService.apiRecords;
   public selectedWikipediaRecords: ApiRecord[] = [];
@@ -44,6 +46,7 @@ export class AppComponent {
 
   public search(searchString: string) {
     if (searchString) {
+      this.searchString = searchString;
       this.apiCallService.resetApiRecords();
       this.selectedItems.forEach((myApi) => {
         this.apiCallService.callApi(searchString, myApi);
@@ -52,56 +55,37 @@ export class AppComponent {
   }
 
   public save(saveAll = false) {
-    const stringifiedObject = this.getStringifiedObjectToSave(saveAll);
-    const blob = new Blob([stringifiedObject], { type: 'application/json' });
+    const stringifiedObject = this.getStringifiedObject(saveAll);
+    this.saveDataToFile(stringifiedObject, this.searchString);
+  }
+
+  private getStringifiedObject(saveAll: boolean) {
+    const selectedData: { [key in SourceId]?: ApiRecord[] } = {};
+    (Object.values(SourceId) as SourceId[]).forEach((sourceId) => {
+      const selectedRecords = (this as any)[
+        `selected${sourceId}Records`
+      ] as ApiRecord[];
+      const allRecords = this.apiRecords()[sourceId];
+
+      const dataToSave = saveAll ? allRecords : selectedRecords;
+
+      if (dataToSave.length) {
+        selectedData[sourceId] = dataToSave;
+      }
+    });
+
+    return JSON.stringify(selectedData, null, 2);
+  }
+
+  private saveDataToFile(selectedData: string, fileName: string) {
+    const blob = new Blob([selectedData], { type: 'application/json' });
     const url = window.URL.createObjectURL(blob);
 
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'records.json'; // file name
+    a.download = fileName + '.json';
     a.click();
 
     window.URL.revokeObjectURL(url);
-  }
-
-  private getStringifiedObjectToSave(saveAll: boolean) {
-    const object: { [key: string]: ApiRecord[] } = {};
-    if (
-      this.selectedOpenLibraryRecords.length ||
-      (saveAll && this.apiRecords().OpenLibrary.length)
-    ) {
-      object['openLibrary'] = saveAll
-        ? this.apiRecords().OpenLibrary
-        : this.selectedOpenLibraryRecords;
-    }
-
-    if (
-      this.selectedWikipediaRecords.length ||
-      (saveAll && this.apiRecords().Wikipedia.length)
-    ) {
-      object['wikipedia'] = saveAll
-        ? this.apiRecords().Wikipedia
-        : this.selectedWikipediaRecords;
-    }
-
-    if (
-      this.selectedHackerNewsRecords.length ||
-      (saveAll && this.apiRecords().HackerNews.length)
-    ) {
-      object['hackerNews'] = saveAll
-        ? this.apiRecords().HackerNews
-        : this.selectedHackerNewsRecords;
-    }
-
-    if (
-      this.selectedGitHubRecords.length ||
-      (saveAll && this.apiRecords().GitHub.length)
-    ) {
-      object['gitHub'] = saveAll
-        ? this.apiRecords().GitHub
-        : this.selectedGitHubRecords;
-    }
-
-    return JSON.stringify(object, null, 2);
   }
 }
