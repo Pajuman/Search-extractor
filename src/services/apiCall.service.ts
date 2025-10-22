@@ -58,14 +58,13 @@ export class ApiCallService {
       apiRecords.push(apiRecord);
     }
     this.apiRecords().Wikipedia = apiRecords;
-    console.log(this.apiRecords());
   }
 
   private processHackerNewsData(response: any) {
     const apiRecords: ApiRecord[] = [];
     const hits: any[] = response.hits;
     hits.forEach((hit) => {
-      if (hit.title && hit.author && hit.points) {
+      if (hit.title && hit.author && hit.points >= 0) {
         const title = hit.title;
         const snippet: string = hit.author;
         const score = hit.points;
@@ -106,7 +105,7 @@ export class ApiCallService {
     const apiRecords: ApiRecord[] = [];
     const items: any[] = response.items;
     items.forEach((item) => {
-      if (item.name && item.description && item.stargazers_count) {
+      if (item.name && item.description && item.stargazers_count >= 0) {
         const title = item.name;
         const snippet: string = item.description;
         const score = item.stargazers_count;
