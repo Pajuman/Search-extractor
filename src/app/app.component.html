@@ -5,7 +5,7 @@
       <p-listbox [options]="items" [(ngModel)]="selectedItems" [checkbox]="true" [selectAll]="selectAll"
                  optionLabel="label" [multiple]="true"
                  [metaKeySelection]="false" (onSelectAllChange)="onSelectAllChange($event)"
-                 (onChange)="onChange($event)"
+                 (onChange)="checkIfAllSelected($event)"
                  scrollHeight="250px"/>
     </div>
     <div class="search-input">

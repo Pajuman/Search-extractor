@@ -34,19 +34,21 @@ export class AppComponent {
   public onSelectAllChange(event: any) {
     this.selectedItems = event.checked ? [...this.items] : [];
     this.selectAll = event.checked;
-    event.updateModel(this.selectedItems, event.originalEvent);
   }
 
-  // ToDo ???
-  public onChange(event: any) {
-    const { originalEvent, value } = event;
-    if (value) this.selectAll = value.length === this.items.length;
+  public checkIfAllSelected(event: any) {
+    if (event.value) {
+      this.selectAll = event.value.length === this.items.length;
+    }
   }
 
   public search(searchString: string) {
-    this.selectedItems.forEach((myApi) => {
-      this.apiCallService.callApi(searchString, myApi);
-    });
+    if (searchString) {
+      this.apiCallService.resetApiRecords();
+      this.selectedItems.forEach((myApi) => {
+        this.apiCallService.callApi(searchString, myApi);
+      });
+    }
   }
 
   public save(saveAll = false) {

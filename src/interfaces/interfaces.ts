@@ -5,6 +5,13 @@ export enum SourceId {
   GitHub = 'GitHub',
 }
 
+export const DEFAULT_API_RECORDS = {
+  [SourceId.Wikipedia]: [],
+  [SourceId.HackerNews]: [],
+  [SourceId.OpenLibrary]: [],
+  [SourceId.GitHub]: [],
+};
+
 export const APIS: MyApi[] = [
   {
     url: '/api/search?source=Wikipedia&search=',

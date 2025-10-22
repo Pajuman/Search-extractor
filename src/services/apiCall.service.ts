@@ -1,17 +1,18 @@
 import { inject, Injectable, signal, WritableSignal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { ApiRecord, MyApi, SourceId } from '../interfaces/interfaces';
+import {
+  ApiRecord,
+  DEFAULT_API_RECORDS,
+  MyApi,
+  SourceId,
+} from '../interfaces/interfaces';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ApiCallService {
-  public apiRecords: WritableSignal<Record<SourceId, ApiRecord[]>> = signal({
-    [SourceId.Wikipedia]: [],
-    [SourceId.HackerNews]: [],
-    [SourceId.OpenLibrary]: [],
-    [SourceId.GitHub]: [],
-  });
+  public apiRecords: WritableSignal<Record<SourceId, ApiRecord[]>> =
+    signal(DEFAULT_API_RECORDS);
   private http = inject(HttpClient);
 
   public callApi(searchString: string, myApi: MyApi) {
@@ -22,6 +23,10 @@ export class ApiCallService {
       },
       error: (err) => console.error(err),
     });
+  }
+
+  public resetApiRecords() {
+    this.apiRecords.set({ ...DEFAULT_API_RECORDS });
   }
 
   private processApiData(sourceId: SourceId, response: string) {
