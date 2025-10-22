@@ -1,11 +1,25 @@
 import express from "express";
 import cors from "cors";
 import { getCache, setCache } from "./cache.js";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 app.use(cors());
 
 const PORT = 3000;
+
+// Serve Angular build
+const angularDistPath = path.join(__dirname, "../dist/search-extractor");
+app.use(express.static(angularDistPath));
+
+// Fallback for Angular routing
+app.get("*", (req, res) => {
+  res.sendFile(path.join(angularDistPath, "index.html"));
+});
 
 app.get("/api/search", async (req, res) => {
   const search = req.query.search;
