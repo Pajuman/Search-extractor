@@ -10,13 +10,14 @@ const __dirname = path.dirname(__filename);
 const app = express();
 app.use(cors());
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 // Serve Angular build
-const angularDistPath = path.resolve(
-  __dirname,
-  "../dist/search-extractor/browser",
+const angularDistPath = path.join(
+  process.cwd(),
+  "dist/search-extractor/browser",
 );
+app.use(express.static(angularDistPath));
 app.use(express.static(angularDistPath));
 
 // Fallback for Angular routing
