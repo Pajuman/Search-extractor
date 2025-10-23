@@ -3,6 +3,7 @@ import { signal, WritableSignal } from '@angular/core';
 import { ApiRecord, SourceId } from '../interfaces/interfaces';
 import {
   PROCESSED_RESPONSES,
+  STRNGIFIED_ALL_JSON,
   STRNGIFIED_HACKER_JSON,
 } from '../services/testMock';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -25,8 +26,8 @@ describe('AppComponent save', () => {
     component.apiRecords = signal({
       Wikipedia: PROCESSED_RESPONSES[0],
       HackerNews: PROCESSED_RESPONSES[1],
-      OpenLibrary: PROCESSED_RESPONSES[2],
-      GitHub: PROCESSED_RESPONSES[3],
+      OpenLibrary: [],
+      GitHub: [],
     }) as WritableSignal<Record<SourceId, ApiRecord[]>>;
 
     component.searchString = 'hobbit';
@@ -41,17 +42,11 @@ describe('AppComponent save', () => {
     expect(spy).toHaveBeenCalledOnceWith(STRNGIFIED_HACKER_JSON, 'hobbit');
   });
 
-  xit('should include all records when saveAll = true', () => {
-    const json = component['getStringifiedObject'](true); // saveAll = true
+  it('should include all records when saveAll = true', () => {
+    const spy = spyOn<any>(component, 'saveDataToFile').and.callThrough();
 
-    const expected = JSON.stringify(
-      {
-        Wikipedia: [{ title: 'Hobbit', url: 'wiki-url' }],
-      },
-      null,
-      2,
-    );
+    component.save(true);
 
-    expect(json).toBe(expected);
+    expect(spy).toHaveBeenCalledOnceWith(STRNGIFIED_ALL_JSON, 'hobbit');
   });
 });

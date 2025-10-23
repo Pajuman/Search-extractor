@@ -320,3 +320,6 @@ export const PROCESSED_RESPONSES: ApiRecord[][] = [
 
 export const STRNGIFIED_HACKER_JSON =
   '{\n  "HackerNews": [\n    {\n      "sourceId": "HackerNews",\n      "score": 1187,\n      "snippet": "Thorondor",\n      "title": "Planet Found in Habitable Zone Around Nearest Star"\n    }\n  ]\n}';
+
+export const STRNGIFIED_ALL_JSON =
+  '{\n  "Wikipedia": [\n    {\n      "sourceId": "Wikipedia",\n      "score": 34,\n      "snippet": "https://en.wikipedia.org/w/rest.php/v1/page/Hobit/html",\n      "title": "Hobit"\n    }\n  ],\n  "HackerNews": [\n    {\n      "sourceId": "HackerNews",\n      "score": 1,\n      "snippet": "kinlan",\n      "title": "Conquer the Lonely Mountain with Hobits^H^H^H^HTML5"\n    },\n    {\n      "sourceId": "HackerNews",\n      "score": 1187,\n      "snippet": "Thorondor",\n      "title": "Planet Found in Habitable Zone Around Nearest Star"\n    }\n  ]\n}';
