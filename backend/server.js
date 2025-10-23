@@ -13,9 +13,9 @@ app.use(cors());
 const PORT = process.env.PORT || 3000;
 
 // Serve Angular build
-const angularDistPath = path.join(
-  process.cwd(),
-  "dist/search-extractor/browser",
+const angularDistPath = path.resolve(
+  __dirname,
+  "../dist/search-extractor/browser",
 );
 
 console.log("Serving Angular app from ", angularDistPath);
