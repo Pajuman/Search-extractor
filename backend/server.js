@@ -2,30 +2,53 @@ import express from "express";
 import cors from "cors";
 import { getCache, setCache } from "./cache.js";
 import path from "node:path";
+import * as fs from "node:fs";
 import { fileURLToPath } from "node:url";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 const app = express();
 app.use(cors());
 
-// ✅ Robust version — works locally AND on Railway
-const angularDistPath = path.join(
-  process.cwd(),
-  "dist/search-extractor/browser",
-);
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-console.log("Serving Angular app from", angularDistPath);
+const PORT = process.env.PORT || 8080;
 
-app.use(express.static(angularDistPath));
+// candidate paths to check (ordered)
+const candidates = [
+  path.join(process.cwd(), "dist/search-extractor/browser"), // common on some builds
+  path.join(process.cwd(), "dist/search-extractor"), // some builds omit 'browser'
+  path.join(process.cwd(), "backend/dist/search-extractor/browser"),
+  path.join(process.cwd(), "backend/dist/search-extractor"),
+  path.join(__dirname, "../dist/search-extractor/browser"),
+  path.join(__dirname, "../dist/search-extractor"),
+];
 
-app.get("/", (req, res) => {
-  res.sendFile(path.join(angularDistPath, "index.html"));
-});
+// find first existing candidate
+let angularDistPath = null;
+for (const p of candidates) {
+  try {
+    if (fs.existsSync(p) && fs.statSync(p).isDirectory()) {
+      angularDistPath = p;
+      break;
+    }
+  } catch (e) {
+    // ignore and continue
+  }
+}
 
-const PORT = process.env.PORT || 3000;
+console.log("process.cwd():", process.cwd());
+console.log("__dirname:", __dirname);
+console.log("Checked candidate paths:");
+candidates.forEach((p) => console.log("  -", p));
+console.log("Resolved angularDistPath:", angularDistPath);
 
+if (!angularDistPath) {
+  console.error(
+    "ERROR: No Angular dist folder found. Make sure `dist/search-extractor` is present in the repository.",
+  );
+  // exit process so Railway shows failure
+  process.exit(1);
+}
 app.get("/api/search", async (req, res) => {
   const search = req.query.search;
   const source = req.query.source;
