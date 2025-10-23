@@ -17,7 +17,8 @@ const angularDistPath = path.join(
   process.cwd(),
   "dist/search-extractor/browser",
 );
-app.use(express.static(angularDistPath));
+
+console.log("Serving Angular app from ", angularDistPath);
 app.use(express.static(angularDistPath));
 
 // Fallback for Angular routing
