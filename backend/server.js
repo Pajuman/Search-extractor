@@ -13,7 +13,7 @@ app.use(cors());
 const PORT = 3000;
 
 // Serve Angular build
-const angularDistPath = path.join(
+const angularDistPath = path.resolve(
   __dirname,
   "../dist/search-extractor/browser",
 );
