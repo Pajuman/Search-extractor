@@ -10,21 +10,21 @@ const __dirname = path.dirname(__filename);
 const app = express();
 app.use(cors());
 
-const PORT = process.env.PORT || 3000;
-
-// Serve Angular build
-const angularDistPath = path.resolve(
-  __dirname,
-  "../dist/search-extractor/browser",
+// ✅ Robust version — works locally AND on Railway
+const angularDistPath = path.join(
+  process.cwd(),
+  "dist/search-extractor/browser",
 );
 
-console.log("Serving Angular app from ", angularDistPath);
+console.log("Serving Angular app from", angularDistPath);
+
 app.use(express.static(angularDistPath));
 
-// Fallback for Angular routing
 app.get("/", (req, res) => {
   res.sendFile(path.join(angularDistPath, "index.html"));
 });
+
+const PORT = process.env.PORT || 3000;
 
 app.get("/api/search", async (req, res) => {
   const search = req.query.search;
