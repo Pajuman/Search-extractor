@@ -2,18 +2,23 @@ import express from "express";
 import cors from "cors";
 import { getCache, setCache } from "./cache.js";
 import path from "node:path";
-import * as fs from "node:fs";
 import { fileURLToPath } from "node:url";
 
 const app = express();
 app.use(cors());
 
+// Fix __dirname in ES module
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const PORT = process.env.PORT || 8080;
 
-console.log("Files in /app/backend:", fs.readdirSync(path.join(__dirname)));
+// Serve Angular build from backend/dist
+const angularDistPath = path.join(__dirname, "dist/search-extractor/browser");
+console.log("Serving Angular app from", angularDistPath);
+
+// Static files
+app.use(express.static(angularDistPath));
 
 app.get("/api/search", async (req, res) => {
   const search = req.query.search;
