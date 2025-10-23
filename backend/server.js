@@ -13,11 +13,14 @@ app.use(cors());
 const PORT = 3000;
 
 // Serve Angular build
-const angularDistPath = path.join(__dirname, "../dist/search-extractor");
+const angularDistPath = path.join(
+  __dirname,
+  "../dist/search-extractor/browser",
+);
 app.use(express.static(angularDistPath));
 
 // Fallback for Angular routing
-app.get("*", (req, res) => {
+app.get("/", (req, res) => {
   res.sendFile(path.join(angularDistPath, "index.html"));
 });
 
