@@ -13,6 +13,7 @@
 - Users can select individual rows from any table and save them as a JSON file.
 - Option to save **all rows from all four tables** at once.
 - Interactive and intuitive interface with Angular frontend and Express backend.
+- Responses are cached in backend memory for 5 minutes.
 
 ## Tech Stack
 
