@@ -36,6 +36,12 @@ for (const p of candidates) {
   }
 }
 
+console.log("Files in /app:", fs.readdirSync("/app"));
+console.log(
+  "Files in /app/dist:",
+  fs.existsSync("/app/dist") ? fs.readdirSync("/app/dist") : "no dist",
+);
+
 console.log("process.cwd():", process.cwd());
 console.log("__dirname:", __dirname);
 console.log("Checked candidate paths:");
